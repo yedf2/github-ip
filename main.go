@@ -40,14 +40,12 @@ func main() {
 		}
 	}
 	rs = append(rs, fmt.Sprintf("%s github.com", ip))
-	of, err := os.OpenFile(fname, os.O_WRONLY, 0)
+	ocont := strings.Join(rs, "\n")
+	fmt.Printf("out content is:\n%s\n", ocont)
+	err = ioutil.WriteFile(fname, []byte(ocont), os.FileMode(os.O_WRONLY))
 	if err != nil && strings.Contains(err.Error(), "permission denied") {
 		log.Fatal("please run with sudo")
 	}
 	fatalIfError(err, "open %s write error: %v", fname, err)
-	ocont := strings.Join(rs, "\n")
-	fmt.Printf("out content is:\n%s\n", ocont)
-	_, err = of.WriteString(ocont)
-	fatalIfError(err, "write error: %v", err)
 	fmt.Printf("github in %s updated to: %s\n", fname, ip)
 }
